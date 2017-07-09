@@ -16,6 +16,13 @@
 
 # define BUFF_SIZE 1000
 
+typedef struct	s_list
+{
+	void			*content;
+	size_t			content_size;
+	struct s_list	*next;
+}				t_list;
+
 int		get_next_line(const int fd, char **line);
 
 #endif
