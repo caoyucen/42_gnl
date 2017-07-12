@@ -12,36 +12,76 @@
 
 # include "get_next_line.h"
 
-int		get_the_rest(const int fd, static	t_list rest, char **line)
+int		bufhasit(char *s)
 {
-	char *tem;
+	int		i;
 
-	if (XXX(rest->content))
-	if (!rest)
-		ft_lstnew("\0", fd); //here fd is not the sizeof content, acltully is a mark for the file(fd)
-
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == '\n')
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
-int		get_the_buf(const int fd, char **line, char *tem)
+int		get_the_rest(const int fd, char *rest, char **line)
+{
+	char *tem;
+	int		i;
+	int		j;
+
+	if(!rest)
+		rest = ft_strnew(1 + BUFF_SIZE)); //I have something here, can char* give to static char*?
+	i = -1;
+	j = -1;
+	while (rest[++i])
+	{
+		line[++j] = rest[i];
+		line[j] = '\0';
+		if (rest[i] == '\n')
+		{
+			copy rest[i~] to tem;
+			reset rest;
+			copy tem to ret;
+			return (0);
+		}
+	}
+		reset rest;
+		return (1);
+}
+
+int		get_the_buf(const int fd, char **line, char *a)
 {
 	int ret;
 
 	while (ret = read(fd, buf, BUFF_SIZE))
 	{
-
-
+		if (buf has \n)
+		{
+			put into line;
+			put into a;
+			return (1);
+		}
+		else
+			put into line;
 	}
-
+	if (ret == 0)
+		return (0);
 }
 
 int		get_next_line(const int fd, char **line)
 {
-	static	t_list rest = NULL; //to save the rest  norm???
+	static	char *rest = NULL; //to save the rest  norm???
 	char	buf[BUFF_SIZE + 1];
-
 
 	if (fd != 1 || !line || (read(fd, buf, 0) < 0)) //read(fd, buf, 0) read error or not, use 0 to give nothing push into buf
 		return (-1);
+	if (get_the_rest(fd, rest, line) == 0)
+		return (1);
+	if (get_the_buf(fd, line, rest->content) == 0)
+		return (0);
 
 
 	return (1);
