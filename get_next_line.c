@@ -12,7 +12,7 @@
 
 # include "get_next_line.h"
 
-int		bufhasit(char *s)
+int		have_it(char *s)
 {
 	int		i;
 
@@ -26,46 +26,62 @@ int		bufhasit(char *s)
 	return (0);
 }
 
-int		get_the_rest(const int fd, char *rest, char **line)
+void ft_reset_rest(char *rest, int i)
 {
-	char *tem;
-	int		i;
-	int		j;
+	int j;
 
-	if(!rest)
-		rest = ft_strnew(1 + BUFF_SIZE)); //I have something here, can char* give to static char*?
-	i = -1;
-	j = -1;
+	j = 0;
 	while (rest[++i])
 	{
-		line[++j] = rest[i];
-		line[j] = '\0';
+		rest[j] = rest[i];
+		j++;
+	}
+	rest[j] = '\0';
+}
+
+int		get_the_rest(const int fd, char *rest, char **line, int n)
+{
+	int		i;
+
+	i = -1;
+	n = 0;
+	while (rest[++i])
+	{
 		if (rest[i] == '\n')
 		{
-			copy rest[i~] to tem;
-			reset rest;
-			copy tem to ret;
+			ft_reset_rest(rest, i);
 			return (0);
 		}
+		line[n] = rest[i];
+		line[n + 1] = '\0';
+		n++;
 	}
-		reset rest;
+		ft_strclr(rest);
 		return (1);
 }
 
-int		get_the_buf(const int fd, char **line, char *a)
+int		read_the_buf(const int fd, char **line, char *rest, int n)
 {
 	int ret;
+	int i;
 
-	while (ret = read(fd, buf, BUFF_SIZE))
+	while ((ret = read(fd, buf, BUFF_SIZE)))
 	{
-		if (buf has \n)
+		if (have_it(buf))
 		{
-			put into line;
-			put into a;
-			return (1);
+			i = -1;
+			while (buf[++i])
+			{
+				if (buf[i] == '\n')
+				{
+					ft_strcpy(rest, (buf + i)); //remember this, this is very important
+					return (1);
+				}
+				line[n + i] = buf[i];
+			}
 		}
 		else
-			put into line;
+			ft_strcpy(rest, buf);
 	}
 	if (ret == 0)
 		return (0);
@@ -73,16 +89,17 @@ int		get_the_buf(const int fd, char **line, char *a)
 
 int		get_next_line(const int fd, char **line)
 {
-	static	char *rest = NULL; //to save the rest  norm???
-	char	buf[BUFF_SIZE + 1];
+	static char	rest[BUFF_SIZE + 1]; //to save the rest
+	static int	n;
+	char				*buf;
 
+	buf = ft_strnew(BUFF_SIZE);
+	n = 0;
 	if (fd != 1 || !line || (read(fd, buf, 0) < 0)) //read(fd, buf, 0) read error or not, use 0 to give nothing push into buf
 		return (-1);
-	if (get_the_rest(fd, rest, line) == 0)
+	if (get_the_rest(fd, rest, line, n) == 0)
 		return (1);
-	if (get_the_buf(fd, line, rest->content) == 0)
+	if (read_the_buf(fd, line, rest, n) == 0)
 		return (0);
-
-
 	return (1);
 }
