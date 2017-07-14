@@ -45,43 +45,40 @@ static int	get_the_rest(const int fd, char *rest, char **line, int n, char *buf)
 	int ret;
 
 	i = -1;
-	if (have_it(rest))
+	if (have_it(rest) or end)
 	{
 		*line = ft_strnew(ft_strlen(rest) + 1);
 		while (rest[++i])
 		{
-			if (rest[i] == '\n')
+			if (rest[i] == '\n' or end)
 			{
 				n = n + i;
 				ft_reset_rest(rest, i);
 				return (1);
 			}
 			*line[i] = rest[i]; //something wrong here
+			ft_putchar(*line[i]);
 		}
 	}
+	return (0);
+}
+
+static int	read_the_buf(const int fd, char **line, char *rest, int n)
+{
+	if (get_the_rest == 1)
+		return (1);
 	while ((ret = read(fd, buf, BUFF_SIZE)))
 	{
-		if (have_it(buf))
-		{
-
-			// i = -1;
-			// while (buf[++i])
-			// {
-			// 	if (buf[i] == '\n')
-			// 	{
-			// 		ft_strcpy(rest, (buf + i));
-			// 		return (1);
-			// 	}
-			// 	line[n + i] = buf[i];
-		}
-		else
-			ft_strcpy(rest, buf);
-	}
-	if ((ret = read(fd, buf, BUFF_SIZE)))
+		if (ret == 0)
+			return (0);
 		rest = ft_strjoin(rest, buf);
-	if (ret == 0)
-		return (2);
-	return (0);
+		if (get_the_rest == 1)
+		{
+			return (1);
+		}
+
+
+	}
 }
 
 
