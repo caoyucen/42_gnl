@@ -26,90 +26,110 @@ static int	have_it(char *s)
 	return (0);
 }
 
-static void	ft_reset_rest(char *rest, int i)
+static void	ft_reset_rest(char **rest, int i)
 {
+
+	/*mark   mark */
+	ft_putendl("reset");
+	/*mark   mark */
 	int j;
 
 	j = 0;
-	while (rest[++i])
+	while (*rest[++i])
 	{
-		rest[j] = rest[i];
+		*rest[j] = *rest[i];
 		j++;
 	}
-	rest[j] = '\0';
+	*rest[j] = '\0';
 }
 
-static int	get_the_rest(const int fd, char *rest, char **line, int n, char *buf)
+static int	read_the_buf(const int fd, char *buf, char **rest)
 {
-	int		i;
 	int ret;
 
-	i = -1;
-	if (have_it(rest))
-	{
-		*line = ft_strnew(ft_strlen(rest) + 1);
-		while (rest[++i])
-		{
-			if (rest[i] == '\n')
-			{
-				n = n + i;
-				ft_reset_rest(rest, i);
-				return (1);
-			}
-			*line[i] = rest[i]; //something wrong here
-		}
-	}
 	while ((ret = read(fd, buf, BUFF_SIZE)))
 	{
-		if (have_it(buf))
-		{
+		*rest = ft_strjoin(*rest, buf);
 
-			// i = -1;
-			// while (buf[++i])
-			// {
-			// 	if (buf[i] == '\n')
-			// 	{
-			// 		ft_strcpy(rest, (buf + i));
-			// 		return (1);
-			// 	}
-			// 	line[n + i] = buf[i];
+		if (have_it(*rest))
+		{
+			/*mark   mark */
+			// ft_putendl(*rest);
+			// ft_putendl(" <- this is in buf");
+			/*mark   mark */
+
+			return (1);
 		}
-		else
-			ft_strcpy(rest, buf);
 	}
-	if ((ret = read(fd, buf, BUFF_SIZE)))
-		rest = ft_strjoin(rest, buf);
 	if (ret == 0)
-		return (2);
-	return (0);
+		return (0);
+	return (-1);
 }
 
+static int	get_the_rest(const int fd, char *buf, char **rest, char **line)
+{
+	int		i;
+
+	/*mark   mark */
+	ft_putendl("one");
+	/*mark   mark */
+	i = 0;
+	if (!have_it(*rest))
+	{
+		/*mark   mark */
+		ft_putendl("come to read");
+		/*mark   mark */
+		if (read_the_buf(fd, buf, rest) == 0) //调用, 且判断是否是eof
+		{
+
+			*line = ft_strnew(ft_strlen(*rest) + 1);
+			ft_strcpy(*line, *rest);
+			return (0);
+		}
+	}
+	// /*mark   mark */
+	// ft_putendl(*rest);
+	// /*mark   mark */
+	// /*mark   mark */
+	// ft_putendl(" <- this should be rest");
+	// /*mark   mark */
+	*line = ft_strnew(ft_strlen(*rest) + 1);
+	while (*rest[i])
+	{
+		if (*rest[i] == '\n')
+		{
+			ft_reset_rest(rest, i);
+			return (1);
+		}
+		*line[i] = *rest[i];
+		ft_putendl("I came here");
+		ft_putendl(*rest);
+		ft_putendl("^ this is rest");
+		ft_putchar(*rest[0]);
+		ft_putendl(" <- this is *rest[0]");
+		ft_putchar(*rest[1]);
+		ft_putendl(" <- this is *rest[1]");
+		i++;
+	}
+	return (-1);
+}
 
 int	get_next_line(const int fd, char **line)
 {
-	static char	rest[BUFF_SIZE + 1];
-	int					n;
+	static char	*rest;
 	char				*buf;
-	int					tem;
 
-	buf = ft_strnew(BUFF_SIZE);
-	n = 0;
-	tem = 0;
-
-
-
+	buf = ft_strnew(BUFF_SIZE + 1);
+	rest = ft_strnew(BUFF_SIZE + 1);
+	//rest[0] = 'N';
 	if (fd < 0 || !line || (read(fd, buf, 0) < 0))
 		return (-1);
-	while ((tem = get_the_rest(fd, rest, line, n, buf)) > 0)
+	while (get_the_rest(fd, buf, &rest, line))
 	{
-		if (tem == 1)
-			return (1);
-		if (tem == 2)
-			return (0);
+		/*mark   mark */
+		ft_putendl("mark");
+		/*mark   mark */
+		return (1);
 	}
-
-	// if (read_the_buf(fd, line, rest, n, buf) == 0)
-	// 	return (0);
-	// ft_putstr("come here\n");
-	return (1);
+	return (0);
 }
