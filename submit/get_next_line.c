@@ -12,38 +12,22 @@
 
 #include "get_next_line.h"
 
-// static int	have_it(char *s)
-// {
-// 	int		i;
-//
-// 	i = 0;
-// 	while (s[i])
-// 	{
-// 		if (s[i] == '\n')
-// 			return (1);
-// 		i++;
-// 	}
-// 	return (0);
-// }
-// ft_strchr(buff, '\n')
-//ft_strchr(const char *s, int c)
-
-static t_list	ft_create_list(int fd)
+static int	have_it(char *s)
 {
-	t_list	*list;
+	int		i;
 
-}
-
-static char *ft_get_tem(const int fd, t_list **rest_list, char *tem)
-{
-	if (!rest_list || !*rest_list)
-		*rest_list =
-	return (tem);
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == '\n')
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
 static int		ft_reset_rest(char *rest, char **line, char *tem)
 {
-
 	int i;
 	int j;
 	int z;
@@ -67,13 +51,12 @@ static int		ft_reset_rest(char *rest, char **line, char *tem)
 	return (0);
 }
 
-static int	read_the_buf(const int fd, char *rest, char **line, char *tem)
+static int	read_the_buf(const int fd, char *rest, char **line, char *tem, char *buf)
 {
 	int ret;
-	char *buf;
+	//char buf[BUFF_SIZE + 1];
 
-	buf = ft_strnew(BUFF_SIZE + 1);
-	if (ft_strchr(tem, '\n'))
+	if (have_it(tem))
 	{
 		ft_reset_rest(rest, line, tem);
 		return (1);
@@ -81,7 +64,7 @@ static int	read_the_buf(const int fd, char *rest, char **line, char *tem)
 	while ((ret = read(fd, buf, BUFF_SIZE)))
 	{
 		tem = ft_strjoin(tem, buf);
-		if (ft_strchr(tem, '\n'))
+		if (have_it(tem))
 		{
 			ft_reset_rest(rest, line, tem);
 			return (1);
@@ -93,28 +76,21 @@ static int	read_the_buf(const int fd, char *rest, char **line, char *tem)
 		if (!(*line)[0])
 			return (0);
 	}
-	if (ret < 0)
-		return (-1);
 	return (1);
 }
 
 int	get_next_line(const int fd, char **line)
 {
-	static t_list	*rest_list;
-	char					*tem;
-	int						n;
+	static char	rest[BUFF_SIZE + 1];
+	char				*buf;
+	char				*tem;
 
+	buf = ft_strnew(BUFF_SIZE + 1);
 	tem = ft_strnew(BUFF_SIZE + 1);
-	if (fd < 0 || !line)
+	if (fd < 0 || !line || (read(fd, buf, 0) < 0))
 		return (-1);
-	//inital tem;
-	ft_get_tem(fd, &rest_list, tem);
-	{
-	//tem = ft_strcpy(tem, rest);
-	n = read_the_buf(fd, buf, rest, line, tem);
-	if (n == 0)
+	tem = ft_strcpy(tem, rest);
+	if (read_the_buf(fd, rest, line, tem, buf) == 0)
 		return (0);
-	else if (n == -1)
-		return (-1);
 	return (1);
 }
