@@ -1,33 +1,51 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_Aug_1st.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ycao <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/06/26 17:18:38 by ycao              #+#    #+#             */
-/*   Updated: 2017/07/12 19:00:11 by ycao             ###   ########.fr       */
+/*   Created: 2017/08/01 16:35:43 by ycao              #+#    #+#             */
+/*   Updated: 2017/08/01 16:35:50 by ycao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static int	have_it(char *s)
+static t_list	*create_rest(int fd)
 {
-	int		i;
+	t_list	*ret;
+	t_rest	*new;
 
-	i = 0;
-	while (s[i])
+	new = (t_rest *)malloc(sizeof(t_rest));
+	if (!new)
+		return (NULL);
+	new->str = ft_strnew(BUFF_SIZE);
+	new->fd_number = fd;
+	ret = ft_lstnew(new, sizeof(t_rest));
+	return (ret);
+}
+
+static char *ft_get_tem(int fd, t_list **rest_list, char *tem)
+{
+	t_rest *temp;
+
+	if (!rest_list || !*rest_list)
+		*rest_list = create_rest(fd);
+	temp = *rest_list;
+	while (temp)
 	{
-		if (s[i] == '\n')
-			return (1);
-		i++;
+		if (((t_rest *)temp->content)->fd_number == fd)
+			return (((t_rest *)temp->content)->str);
+		temp = temp->next;
 	}
-	return (0);
+	ft_lstadd(rest_list, create_rest(fd))
+	return (((t_rest *)(*rest_list)->content)->str); /*this is a problem */
 }
 
 static int		ft_reset_rest(char *rest, char **line, char *tem)
 {
+
 	int i;
 	int j;
 	int z;
@@ -51,12 +69,13 @@ static int		ft_reset_rest(char *rest, char **line, char *tem)
 	return (0);
 }
 
-static int	read_the_buf(const int fd, char *rest, char **line, char *tem, char *buf)
+static int	read_the_buf(int fd, char *rest, char **line, char *tem)
 {
 	int ret;
-	//char buf[BUFF_SIZE + 1];
+	char *buf;
 
-	if (have_it(tem))
+	buf = ft_strnew(BUFF_SIZE + 1);
+	if (ft_strchr(tem, '\n'))
 	{
 		ft_reset_rest(rest, line, tem);
 		return (1);
@@ -64,7 +83,7 @@ static int	read_the_buf(const int fd, char *rest, char **line, char *tem, char *
 	while ((ret = read(fd, buf, BUFF_SIZE)))
 	{
 		tem = ft_strjoin(tem, buf);
-		if (have_it(tem))
+		if (ft_strchr(tem, '\n'))
 		{
 			ft_reset_rest(rest, line, tem);
 			return (1);
@@ -72,25 +91,34 @@ static int	read_the_buf(const int fd, char *rest, char **line, char *tem, char *
 	}
 	ft_reset_rest(rest, line, tem);
 	if (ret == 0)
-	{
-		if (!(*line)[0])
 			return (0);
-	}
+	if (ret < 0)
+		return (-1);
 	return (1);
 }
 
 int	get_next_line(const int fd, char **line)
 {
-	static char	rest[BUFF_SIZE + 1];
-	char				*buf;
-	char				*tem;
+	static t_list	*rest_list;
+	char					*tem;
+	char					*rest;
+	int						n;
 
-	buf = ft_strnew(BUFF_SIZE + 1);
 	tem = ft_strnew(BUFF_SIZE + 1);
-	if (fd < 0 || !line || (read(fd, buf, 0) < 0))
+	if (fd < 0 || !line)
 		return (-1);
-	tem = ft_strcpy(tem, rest);
-	if (read_the_buf(fd, rest, line, tem, buf) == 0)
+	//inital tem;
+
+	&rest = &ft_get_tem(fd, &rest_list, tem));
+	if (rest)
+		tem = ft_strcpy(tem, rest);
+	n = read_the_buf(fd, rest, line, tem);
+	if (n == 0)
+	{
+		if (!(*line)[0])
 		return (0);
+	}
+	else if (n == -1)
+		return (-1);
 	return (1);
 }

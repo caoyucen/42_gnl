@@ -1,25 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ycao <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/06/26 17:18:53 by ycao              #+#    #+#             */
-/*   Updated: 2017/07/12 18:55:00 by ycao             ###   ########.fr       */
+/*   Created: 2017/03/15 14:51:24 by ycao              #+#    #+#             */
+/*   Updated: 2017/03/23 19:57:13 by ycao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# include "libft.h"
+#include "libft.h"
 
-# define BUFF_SIZE 8
-
-typedef struct	s_rest
+char	*ft_strchr(const char *s, int c)
 {
-	char			*str;
-	int				fd_number;
-}				t_rest;
+	char	*a;
 
-#endif
+	a = (char*)s;
+	while (*a)
+	{
+		if (*a == (char)c)
+			return (a);
+		a++;
+	}
+	if (*a == (char)c)
+		return (a);
+	return (NULL);
+}
