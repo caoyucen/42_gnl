@@ -109,6 +109,8 @@ int	get_next_line(const int fd, char **line)
 	char					*rest;
 	int						n;
 
+	if (fd < 0 || !line)
+		return (-1);
 	tem = ft_strnew(BUFF_SIZE + 1);
 	if (fd < 0 || !line)
 		return (-1);
