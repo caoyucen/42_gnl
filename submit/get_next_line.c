@@ -26,7 +26,7 @@ static t_list	*create_rest(int fd)
 	return (ret);
 }
 
-static char	*ft_get_tem(int fd, t_list **rest_list)
+static char *ft_get_tem(int fd, t_list **rest_list)
 {
 	t_list *temp;
 
@@ -40,11 +40,12 @@ static char	*ft_get_tem(int fd, t_list **rest_list)
 		temp = temp->next;
 	}
 	ft_lstadd(rest_list, create_rest(fd));
-	return (((t_rest *)(*rest_list)->content)->str);
+	return (((t_rest *)(*rest_list)->content)->str); /*this is a problem */
 }
 
 static int		ft_reset_rest(char *rest, char **line, char *tem)
 {
+
 	int i;
 	int j;
 	int z;
@@ -90,12 +91,18 @@ static int	read_the_buf(int fd, char *rest, char **line, char *tem)
 		}
 	}
 	ft_reset_rest(rest, line, tem);
+	tem[0] = '\0';
 	if (ret == 0)
-		return (0);
-	return (-1);
+	{
+
+			return (0);
+	}
+	if (ret < 0)
+		return (-1);
+	return (1);
 }
 
-int					get_next_line(const int fd, char **line)
+int	get_next_line(const int fd, char **line)
 {
 	static t_list	*rest_list;
 	char					*tem;
@@ -103,7 +110,7 @@ int					get_next_line(const int fd, char **line)
 	int						n;
 
 	tem = ft_strnew(BUFF_SIZE + 1);
-	if (fd < 0 || !line || !*line)
+	if (fd < 0 || !line)
 		return (-1);
 	rest = ft_get_tem(fd, &rest_list);
 	if (rest)

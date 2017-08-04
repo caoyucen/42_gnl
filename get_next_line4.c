@@ -131,12 +131,18 @@ int	get_next_line(const int fd, char **line)
 	tem = ft_strnew(BUFF_SIZE + 1);
 	if (fd < 0 || !line)
 		return (-1);
+	//inital tem;
+
+
 	rest = ft_get_tem(fd, &rest_list);
+	// ft_putstr("    rest is: ");
+	// ft_putendl(rest);
 	if (rest)
 		tem = ft_strcpy(tem, rest);
 	n = read_the_buf(fd, rest, line, tem);
 	if (n == 0)
 	{
+		// ft_putendl("this is the part5");
 		if (!(*line)[0])
 			return (0);
 	}
