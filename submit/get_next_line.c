@@ -45,7 +45,6 @@ static char *ft_get_tem(int fd, t_list **rest_list)
 
 static int		ft_reset_rest(char *rest, char **line, char *tem)
 {
-
 	int i;
 	int j;
 	int z;
@@ -91,15 +90,9 @@ static int	read_the_buf(int fd, char *rest, char **line, char *tem)
 		}
 	}
 	ft_reset_rest(rest, line, tem);
-	tem[0] = '\0';
 	if (ret == 0)
-	{
-
-			return (0);
-	}
-	if (ret < 0)
-		return (-1);
-	return (1);
+		return (0);
+	return (-1);
 }
 
 int	get_next_line(const int fd, char **line)
@@ -108,11 +101,10 @@ int	get_next_line(const int fd, char **line)
 	char					*tem;
 	char					*rest;
 	int						n;
-	char					*buf[BUFF_SIZE + 1];
 
-	if (fd < 0 || !line || read(fd, buf,0) < 0)
-		return (-1);
 	tem = ft_strnew(BUFF_SIZE + 1);
+	if (fd < 0 || !line || read(fd, tem, 0) < 0)
+		return (-1);
 	rest = ft_get_tem(fd, &rest_list);
 	if (rest)
 		tem = ft_strcpy(tem, rest);
