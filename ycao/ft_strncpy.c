@@ -1,27 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_strncpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ycao <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/06/26 17:18:53 by ycao              #+#    #+#             */
-/*   Updated: 2017/07/12 18:55:00 by ycao             ###   ########.fr       */
+/*   Created: 2017/03/09 19:01:31 by ycao              #+#    #+#             */
+/*   Updated: 2017/03/23 19:45:26 by ycao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# include "libft.h"
+#include "libft.h"
 
-# define BUFF_SIZE 8
-
-int	get_next_line(const int fd, char **line);
-
-typedef struct	s_rest
+char	*ft_strncpy(char *dest, const char *src, size_t n)
 {
-	char			*str;
-	int				fd_number;
-}				t_rest;
+	size_t	i;
 
-#endif
+	i = 0;
+	while (i < n && src[i] != '\0')
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	while (i < n)
+	{
+		dest[i] = '\0';
+		i++;
+	}
+	return (dest);
+}

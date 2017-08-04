@@ -1,27 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_strequ.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ycao <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/06/26 17:18:53 by ycao              #+#    #+#             */
-/*   Updated: 2017/07/12 18:55:00 by ycao             ###   ########.fr       */
+/*   Created: 2017/03/23 16:00:34 by ycao              #+#    #+#             */
+/*   Updated: 2017/03/23 19:24:24 by ycao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# include "libft.h"
+#include "libft.h"
 
-# define BUFF_SIZE 8
-
-int	get_next_line(const int fd, char **line);
-
-typedef struct	s_rest
+int		ft_strequ(char const *s1, char const *s2)
 {
-	char			*str;
-	int				fd_number;
-}				t_rest;
+	int		i;
 
-#endif
+	if (!s1 || !s2)
+		return (0);
+	i = 0;
+	if (ft_strlen(s1) != ft_strlen(s2))
+		return (0);
+	while (i < (int)ft_strlen(s1))
+	{
+		if (s1[i] != s2[i])
+			return (0);
+		i++;
+	}
+	return (1);
+}

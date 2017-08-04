@@ -1,27 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_strstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ycao <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/06/26 17:18:53 by ycao              #+#    #+#             */
-/*   Updated: 2017/07/12 18:55:00 by ycao             ###   ########.fr       */
+/*   Created: 2017/03/15 15:44:27 by ycao              #+#    #+#             */
+/*   Updated: 2017/03/23 21:56:22 by ycao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# include "libft.h"
+#include "libft.h"
 
-# define BUFF_SIZE 8
-
-int	get_next_line(const int fd, char **line);
-
-typedef struct	s_rest
+char	*ft_strstr(const char *big, const char *little)
 {
-	char			*str;
-	int				fd_number;
-}				t_rest;
+	int		i;
+	int		j;
+	char	*t;
 
-#endif
+	i = 0;
+	if (!*little)
+		return ((char*)big);
+	while (big[i])
+	{
+		if (big[i] == little[0])
+		{
+			t = (char*)big + i;
+			j = 0;
+			while (big[i + j] == little[j])
+			{
+				if (little[j + 1] == '\0')
+					return (t);
+				j++;
+			}
+			t = NULL;
+		}
+		i++;
+	}
+	return (NULL);
+}

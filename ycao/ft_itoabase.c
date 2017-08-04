@@ -1,27 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ycao <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/06/26 17:18:53 by ycao              #+#    #+#             */
-/*   Updated: 2017/07/12 18:55:00 by ycao             ###   ########.fr       */
+/*   Created: 2017/03/23 15:46:32 by ycao              #+#    #+#             */
+/*   Updated: 2017/03/23 22:37:17 by ycao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# include "libft.h"
+#include "libft.h"
 
-# define BUFF_SIZE 8
-
-int	get_next_line(const int fd, char **line);
-
-typedef struct	s_rest
+int		ft_itoabase(int n)
 {
-	char			*str;
-	int				fd_number;
-}				t_rest;
+	int i;
 
-#endif
+	i = 0;
+	while (n >= 1)
+	{
+		n = n / 10;
+		i++;
+	}
+	return (i);
+}

@@ -3,18 +3,22 @@
 
 int		main(int argc, char **argv)
 {
-	int		fd;
+	int		fd_1;
+	int 	fd_2
 	char	*line;
 
 	if (argc == 1)
 		fd = 0;
-	else if (argc == 2)
-		fd = open(argv[1], O_RDONLY);
+	else
+		{
+			fd_1 = open(argv[1], O_RDONLY);
+			fd_2 = open(argv[2], O_RDONLY);
+		}
 	else
 		return (2);
 	while (get_next_line(fd, &line) == 1)
 	{
-		ft_putstr("in the main: ");
+		ft_putendl("int the main, line is ");
 		ft_putendl(line);
 		free(line);
 	}

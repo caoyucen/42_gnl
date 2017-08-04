@@ -1,27 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ycao <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/06/26 17:18:53 by ycao              #+#    #+#             */
-/*   Updated: 2017/07/12 18:55:00 by ycao             ###   ########.fr       */
+/*   Created: 2017/03/23 15:50:21 by ycao              #+#    #+#             */
+/*   Updated: 2017/03/23 23:06:30 by ycao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# include "libft.h"
+#include "libft.h"
 
-# define BUFF_SIZE 8
-
-int	get_next_line(const int fd, char **line);
-
-typedef struct	s_rest
+void	ft_putendl_fd(char const *s, int fd)
 {
-	char			*str;
-	int				fd_number;
-}				t_rest;
-
-#endif
+	if (s == NULL)
+		return ;
+	write(fd, s, ft_strlen(s));
+	write(fd, "\n", 1);
+}

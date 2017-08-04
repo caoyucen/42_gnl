@@ -1,27 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ycao <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/06/26 17:18:53 by ycao              #+#    #+#             */
-/*   Updated: 2017/07/12 18:55:00 by ycao             ###   ########.fr       */
+/*   Created: 2017/03/23 16:03:53 by ycao              #+#    #+#             */
+/*   Updated: 2017/03/23 23:33:44 by ycao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# include "libft.h"
+#include "libft.h"
 
-# define BUFF_SIZE 8
-
-int	get_next_line(const int fd, char **line);
-
-typedef struct	s_rest
+char	*ft_strtrim(char const *s)
 {
-	char			*str;
-	int				fd_number;
-}				t_rest;
+	int		len;
+	char	*str;
+	size_t	i;
 
-#endif
+	if (!s)
+		return (NULL);
+	i = 0;
+	while (s[i] != '\0' && ft_isspace(s[i]))
+		i++;
+	if (i == ft_strlen(s))
+		return (ft_strnew(0));
+	len = ft_strlen(s) - 1;
+	while (ft_isspace(s[len]))
+		len--;
+	str = ft_strnew(len + 1 - i);
+	if (!str)
+		return (NULL);
+	ft_strncpy(str, s + i, (len + 1 - i));
+	return (str);
+}
