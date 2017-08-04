@@ -108,12 +108,11 @@ int	get_next_line(const int fd, char **line)
 	char					*tem;
 	char					*rest;
 	int						n;
+	char					*buf[BUFF_SIZE + 1];
 
-	if (fd < 0 || !line)
+	if (fd < 0 || !line || read(fd, buf,0) < 0)
 		return (-1);
 	tem = ft_strnew(BUFF_SIZE + 1);
-	if (fd < 0 || !line)
-		return (-1);
 	rest = ft_get_tem(fd, &rest_list);
 	if (rest)
 		tem = ft_strcpy(tem, rest);
