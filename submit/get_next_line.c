@@ -23,6 +23,7 @@ static t_list	*create_rest(int fd)
 	new->str = ft_strnew(BUFF_SIZE);
 	new->fd_number = fd;
 	ret = ft_lstnew(new, sizeof(t_rest));
+	free(new);
 	return (ret);
 }
 
@@ -72,6 +73,7 @@ static int		read_the_buf(int fd, char *rest, char **line, char *tem)
 {
 	int		ret;
 	char	*buf;
+	char	*temfree;
 
 	buf = ft_strnew(BUFF_SIZE + 1);
 	if (ft_strchr(tem, '\n'))
@@ -82,7 +84,9 @@ static int		read_the_buf(int fd, char *rest, char **line, char *tem)
 	while ((ret = read(fd, buf, BUFF_SIZE)))
 	{
 		buf[ret] = '\0';
+		temfree = tem;
 		tem = ft_strjoin(tem, buf);
+		free(temfree);
 		if (ft_strchr(tem, '\n'))
 		{
 			ft_reset_rest(rest, line, tem);
@@ -90,9 +94,7 @@ static int		read_the_buf(int fd, char *rest, char **line, char *tem)
 		}
 	}
 	ft_reset_rest(rest, line, tem);
-	if (ret == 0)
-		return (0);
-	return (-1);
+	return (0);
 }
 
 int				get_next_line(const int fd, char **line)
